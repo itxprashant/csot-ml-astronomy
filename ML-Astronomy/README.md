@@ -165,11 +165,11 @@ The classes themselves are explained in detail in [`Week-1/04-hubble-tuning-fork
 flowchart LR
     W1["Week 1<br/>Tensors + GPU + DataLoaders<br/>(Hubble Sequence, CCDs, Filters)"] --> W2["Week 2<br/>Baseline + MLP<br/>(Surface brightness, Sersic)"]
     W2 --> W3["Week 3<br/>CNN + Training + Eval<br/>(Density waves, Lenticulars, Mergers)"]
-    W3 --> W4["Week 4<br/>To be announced"]
+    W3 --> W4["Week 4<br/>CLIP zero-shot lens finding<br/>(Strong gravitational lensing)"]
     W4 --> W5["Week 5<br/>To be announced"]
 ```
 
-Each week pairs **machine-learning skills** with the **astronomy concepts** that motivate them. By the end of Week 3 you will have a trained CNN, a confusion matrix you can interpret astrophysically, and saved weights you can re-load. Weeks 4 and 5 build further — content to be announced.
+Each week pairs **machine-learning skills** with the **astronomy concepts** that motivate them. By the end of Week 3 you will have a trained CNN, a confusion matrix you can interpret astrophysically, and saved weights you can re-load. Week 4 opens a second project — hunting strong gravitational lenses with a pretrained vision-language model (CLIP) — and Week 5 builds further (content to be announced).
 
 A complementary view — **what flows through the pipeline each week**:
 
@@ -196,7 +196,7 @@ By the end you will be able to explain, defend, and reproduce every arrow in tha
 | 1 | Foundations: Tensors, GPUs & the Galaxy Data Pipeline | Tensors, GPU, Colab, `transforms`, `ImageFolder`, `DataLoader` | Hubble Tuning Fork, galaxy morphologies, CCDs, photometric filters (`ugriz`) | [Week-1/](Week-1/) |
 | 2 | Baselines & Fully-Connected Networks | Flattening, KNN / Logistic Regression, `nn.Module`, `nn.Linear`, loss + optim | Surface brightness, isophotes, Sérsic profile, stellar demographics | [Week-2/](Week-2/) |
 | 3 | CNNs, the Training Loop & Evaluation | `nn.Conv2d`, `nn.MaxPool2d`, training loop, eval loop, confusion matrix, checkpointing | Spiral density waves, dust lanes, H II regions, lenticulars (S0), mergers | [Week-3/](Week-3/) |
-| 4 | To be announced | TBA | TBA | [Week-4/](Week-4/) |
+| 4 | Multimodal Lens Finding with CLIP | Vision-language models, CLIP, zero-shot classification, cosine similarity, precision/recall, ROC-AUC | Strong gravitational lensing, Einstein rings, arcs, dark matter, Euclid cutouts | [Week-4/](Week-4/) |
 | 5 | To be announced | TBA | TBA | [Week-5/](Week-5/) |
 
 ### What each week delivers
@@ -204,7 +204,8 @@ By the end you will be able to explain, defend, and reproduce every arrow in tha
 - **Week 1 — Foundations.** A working Colab GPU notebook, the language to describe galaxy morphology, and a complete data pipeline. *Deliverables:* a notebook that prints `cuda:0` and moves a tensor to the GPU (Part 1), plus a matplotlib grid of galaxy thumbnails plotted directly from a `DataLoader` with class labels (Part 2).
 - **Week 2 — Baseline & MLP.** A traditional ML classifier trained on flattened pixels, then your first neural network. *Deliverables:* a scikit-learn baseline accuracy (the bar later models must clear) and a 2-layer MLP that forward-passes a batch without errors and prints its architecture.
 - **Week 3 — CNN, Training & Evaluation.** The headline week. *Deliverables:* a small CNN trained for 5–10 epochs with a clearly-decreasing loss curve, validation/test accuracy beating the Week-2 baseline, train/val loss curves, a confusion matrix you can talk about astrophysically, and `galaxy_model.pth` weights ready to ship.
-- **Weeks 4 & 5 — To be announced.** Content is being planned; these build on the trained CNN from Week 3.
+- **Week 4 — Multimodal Lens Finding with CLIP.** A second project: hunt rare **strong gravitational lenses** with a frozen vision-language model. *Deliverables:* a CLIP zero-shot lens ranker over the Euclid expert-judged cutouts, an ROC / precision-recall evaluation that respects the class imbalance, and a true/false-positive error gallery read astrophysically.
+- **Week 5 — To be announced.** Content is being planned; it builds on the Week 4 lens project.
 
 ---
 
@@ -320,6 +321,12 @@ A quick reference for jargon that recurs across weeks. Each term is explained in
 - **Pooling.** A downsampling operation that summarises a small spatial region. (Week 3)
 - **Overfitting.** When training loss keeps falling but validation loss starts rising. (Week 3)
 - **Confusion matrix.** A grid showing predicted vs. true labels — invaluable for diagnosing class-specific failures. (Week 3)
+- **Vision–language model (VLM).** A model that relates images and text in one shared space (CLIP, LLaVA, GPT-4o). (Week 4)
+- **CLIP.** A contrastive model that maps images and text into a shared embedding space, enabling zero-shot classification. (Week 4)
+- **Zero-shot.** Classifying into categories via text prompts, with no task-specific training examples. (Week 4)
+- **Cosine similarity.** The cosine of the angle between two vectors, used to compare CLIP embeddings. (Week 4)
+- **Precision / recall.** Fraction of flagged objects that are real / fraction of real objects found — essential for rare classes. (Week 4)
+- **ROC-AUC.** A threshold-free score (0.5 random, 1.0 perfect) for how well a score ranks positives above negatives. (Week 4)
 
 ### Astronomy terms
 
@@ -338,6 +345,9 @@ A quick reference for jargon that recurs across weeks. Each term is explained in
 - **Dust lane.** A dark band in a galaxy image where dust absorbs starlight. (Week 3)
 - **H II region.** A pink-ish bright patch where new massive stars ionise surrounding hydrogen — a starforming nursery. (Week 3)
 - **Merger.** Two galaxies in the act of colliding / coalescing — produces irregular morphology and starbursts. (Week 3)
+- **Strong gravitational lensing.** A foreground mass bends a background galaxy's light into visible arcs, rings, or multiple images. (Week 4)
+- **Weak gravitational lensing.** Subtle, statistical shape distortions of many background galaxies; not used in the notebooks. (Week 4)
+- **Einstein ring.** A complete or near-complete circular image of a background source, from near-perfect alignment. (Week 4)
 
 ---
 
