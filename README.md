@@ -34,7 +34,7 @@ Inspired by DevClub's Summer of Code, CSoT is the launchpad for freshers (and an
 | 2    | [Baselines & Fully-Connected Networks](ML-Astronomy/Week-2/) | Available |
 | 3    | [CNNs, the Training Loop & Evaluation](ML-Astronomy/Week-3/) | Available |
 | 4    | [Multimodal Lens Finding with CLIP](ML-Astronomy/Week-4/) | Available |
-| 5    | [To be announced](ML-Astronomy/Week-5/)      | Coming soon |
+| 5    | [VLM Audit and the CNN vs CLIP vs VLM Capstone](ML-Astronomy/Week-5/) | Available |
 
 Read the [track-level overview](ML-Astronomy/README.md) for the project abstract, dataset details, and the full learning arc.
 
