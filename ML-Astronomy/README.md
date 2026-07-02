@@ -166,10 +166,10 @@ flowchart LR
     W1["Week 1<br/>Tensors + GPU + DataLoaders<br/>(Hubble Sequence, CCDs, Filters)"] --> W2["Week 2<br/>Baseline + MLP<br/>(Surface brightness, Sersic)"]
     W2 --> W3["Week 3<br/>CNN + Training + Eval<br/>(Density waves, Lenticulars, Mergers)"]
     W3 --> W4["Week 4<br/>CLIP zero-shot lens finding<br/>(Strong gravitational lensing)"]
-    W4 --> W5["Week 5<br/>To be announced"]
+    W4 --> W5["Week 5<br/>VLM audit + capstone<br/>(CNN vs CLIP vs VLM)"]
 ```
 
-Each week pairs **machine-learning skills** with the **astronomy concepts** that motivate them. By the end of Week 3 you will have a trained CNN, a confusion matrix you can interpret astrophysically, and saved weights you can re-load. Week 4 opens a second project — hunting strong gravitational lenses with a pretrained vision-language model (CLIP) — and Week 5 builds further (content to be announced).
+Each week pairs **machine-learning skills** with the **astronomy concepts** that motivate them. By the end of Week 3 you will have a trained CNN, a confusion matrix you can interpret astrophysically, and saved weights you can re-load. Week 4 opens a second project — hunting strong gravitational lenses with a pretrained vision-language model (CLIP) — and Week 5 closes the track by auditing a generative VLM and comparing CNN, CLIP, and VLM head-to-head on the same lens cutouts.
 
 A complementary view — **what flows through the pipeline each week**:
 
@@ -197,7 +197,7 @@ By the end you will be able to explain, defend, and reproduce every arrow in tha
 | 2 | Baselines & Fully-Connected Networks | Flattening, KNN / Logistic Regression, `nn.Module`, `nn.Linear`, loss + optim | Surface brightness, isophotes, Sérsic profile, stellar demographics | [Week-2/](Week-2/) |
 | 3 | CNNs, the Training Loop & Evaluation | `nn.Conv2d`, `nn.MaxPool2d`, training loop, eval loop, confusion matrix, checkpointing | Spiral density waves, dust lanes, H II regions, lenticulars (S0), mergers | [Week-3/](Week-3/) |
 | 4 | Multimodal Lens Finding with CLIP | Vision-language models, CLIP, zero-shot classification, cosine similarity, precision/recall, ROC-AUC | Strong gravitational lensing, Einstein rings, arcs, dark matter, Euclid cutouts | [Week-4/](Week-4/) |
-| 5 | To be announced | TBA | TBA | [Week-5/](Week-5/) |
+| 5 | VLM Audit and the CNN vs CLIP vs VLM Capstone | Generative VLM prompting, structured outputs, hallucination auditing, precision/recall, model comparison | Human-in-the-loop surveys, arcs vs spiral/merger/ring lookalikes, Rubin/LSST scale | [Week-5/](Week-5/) |
 
 ### What each week delivers
 
@@ -205,7 +205,7 @@ By the end you will be able to explain, defend, and reproduce every arrow in tha
 - **Week 2 — Baseline & MLP.** A traditional ML classifier trained on flattened pixels, then your first neural network. *Deliverables:* a scikit-learn baseline accuracy (the bar later models must clear) and a 2-layer MLP that forward-passes a batch without errors and prints its architecture.
 - **Week 3 — CNN, Training & Evaluation.** The headline week. *Deliverables:* a small CNN trained for 5–10 epochs with a clearly-decreasing loss curve, validation/test accuracy beating the Week-2 baseline, train/val loss curves, a confusion matrix you can talk about astrophysically, and `galaxy_model.pth` weights ready to ship.
 - **Week 4 — Multimodal Lens Finding with CLIP.** A second project: hunt rare **strong gravitational lenses** with a frozen vision-language model. *Deliverables:* a CLIP zero-shot lens ranker over the Euclid expert-judged cutouts, an ROC / precision-recall evaluation that respects the class imbalance, and a true/false-positive error gallery read astrophysically.
-- **Week 5 — To be announced.** Content is being planned; it builds on the Week 4 lens project.
+- **Week 5 — VLM Audit and Capstone.** The track finale: interrogate a generative vision-language model and put three tools on trial. *Deliverables:* a documented VLM audit on 30-50 Euclid cutouts with precision/recall and hallucination examples, a three-way CNN vs CLIP vs VLM comparison figure on the same images, and a science-aware capstone reflection on trust and human review.
 
 ---
 
@@ -327,6 +327,9 @@ A quick reference for jargon that recurs across weeks. Each term is explained in
 - **Cosine similarity.** The cosine of the angle between two vectors, used to compare CLIP embeddings. (Week 4)
 - **Precision / recall.** Fraction of flagged objects that are real / fraction of real objects found — essential for rare classes. (Week 4)
 - **ROC-AUC.** A threshold-free score (0.5 random, 1.0 perfect) for how well a score ranks positives above negatives. (Week 4)
+- **Generative VLM.** A vision-language model that outputs free text describing an image (Qwen2-VL, LLaVA, GPT-4o), as opposed to CLIP's similarity score. (Week 5)
+- **Hallucination.** When a model confidently describes features that are not present in the image — a key risk when trusting a VLM. (Week 5)
+- **Human-in-the-loop.** A workflow where automated tools triage candidates and humans make the final call. (Week 5)
 
 ### Astronomy terms
 
@@ -387,6 +390,15 @@ A catalogue of the most frequent ways students stumble, with their fixes. Bookma
 - **`Dropout` randomness in eval** → Forgot `model.eval()`. Always call it before evaluation.
 - **Gradients filling up memory during eval** → Forgot `with torch.no_grad():`. Wrap the eval loop.
 - **Accuracy looks suspiciously high** → You're evaluating on the training set, or your test set leaked into training. Audit your splits.
+
+### Multimodal models (Week 4–5)
+
+- **`ModuleNotFoundError: datasets` / `transformers`** → Run `pip install datasets transformers` (add `accelerate qwen-vl-utils` in Week 5) in the first Colab cell.
+- **CLIP scores all identical or ≈0** → You compared raw embeddings; L2-**normalise** image and text vectors before the dot product (cosine similarity).
+- **"99% accuracy" on lens finding** → Class imbalance. Report **precision/recall/ROC-AUC**, never accuracy alone.
+- **VLM answer won't parse** → Pin the fixed `VERDICT/EVIDENCE/CAUTION` prompt and default to `uncertain` on parse failure.
+- **VLM verdict changes every run** → Use low temperature / greedy decoding; fix seeds where possible.
+- **Week-3 CNN does badly on Euclid cutouts** → **Expected** — wrong task *and* domain shift; it's the lesson, not a bug.
 
 ---
 
